@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سيد التلقين - إتقان كل التقنيات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* ... (نفس أكواد CSS من الرد السابق بالضبط - لا حاجة لتغييرها) ... */
+        :root {
+            --primary-color: #1a2a6c;
+            --secondary-color: #b21f1f;
+            --accent-color: #fdbb2d;
+            --text-color: #f0f0f0;
+            --bg-color: #0f0c29;
+            --card-bg-color: #1c183f;
+            --font-family-arabic: 'Cairo', sans-serif;
+            --font-family-latin: 'Poppins', sans-serif;
+            --border-radius: 12px;
+            --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            --nav-width: 80px; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-family-arabic);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 60px;
+            padding-right: var(--nav-width);
+        }
+        html[dir="ltr"] body { padding-right: 0; padding-left: var(--nav-width); }
+
+        .presentation-container { /* يستخدم كحاوية للعبة */
+            width: calc(100% - var(--nav-width) - 20px);
+            max-width: 1200px;
+            height: 85vh;
+            max-height: 800px; 
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            margin-right: 10px;
+        }
+        html[dir="ltr"] .presentation-container { margin-right: 0; margin-left: 10px; }
+        
+        /* تم تعديل هذا ليشير إلى حاوية اللعبة الفعلية بدلاً من الشرائح */
+        .game-content-area { 
+            width: 100%;
+            height: 100%;
+            padding: 20px 30px;
+            overflow-y: auto;
+        }
+        .game-content-area::-webkit-scrollbar { width: 8px; }
+        .game-content-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        .game-content-area::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; }
+        .game-content-area::-webkit-scrollbar-thumb:hover { background: #e8a820; }
+
+
+        .card-style-content { /* هذا سيستخدم بدلاً من .slide-content للتحديات */
+            background-color: var(--card-bg-color);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+            width: 100%; max-width: 100%;
+            text-align: center; margin-bottom: 20px;
+        }
+
+        .card-style-content h1, .card-style-content h2, .card-style-content h3 { color: var(--accent-color); margin-bottom: 20px; font-weight: 700; }
+        .card-style-content h1 { font-size: 2.2em; }
+        .card-style-content h2 { font-size: 1.9em; } /* لعنوان التحدي */
+        .card-style-content h3 { font-size: 1.6em; margin-top: 15px; } /* قد لا تستخدم كثيراً هنا */
+        .card-style-content h4 { font-size: 1.25em; color: var(--accent-color); margin-top: 18px; margin-bottom: 8px; text-align: right; font-weight: 600;}
+        
+        .card-style-content p, .card-style-content li { font-size: 1em; margin-bottom: 10px; text-align: right; }
+        .card-style-content ul { list-style-position: inside; padding-right: 20px; text-align: right; }
+        .card-style-content ul li { margin-bottom: 8px; }
+        .card-style-content ul li::before { content: "\f058"; font-family: "Font Awesome 6 Free"; font-weight: 900; color: var(--accent-color); margin-left: 10px; font-size: 0.9em; }
+
+        .developer-explanation { /* ستبقى كما هي */
+            background-color: rgba(253, 187, 45, 0.1); 
+            border-right: 4px solid var(--accent-color);
+            padding: 15px; margin-top: 20px; margin-bottom: 20px;
+            border-radius: var(--border-radius); text-align: right;
+        }
+        html[dir="ltr"] .developer-explanation { border-right: none; border-left: 4px solid var(--accent-color); }
+        .developer-explanation p { font-size: 0.95em; color: #e0e0e0; line-height: 1.6; }
+        .developer-explanation strong { color: var(--accent-color); }
+
+        .title-icon, .slide-main-icon { font-size: 4em; color: var(--accent-color); margin-bottom: 20px; display: block; text-shadow: 0 0 15px rgba(253, 187, 45, 0.5); }
+        .slide-main-icon { font-size: 3em; } /* يمكن استخدامها لعنوان المستوى */
+        .subtitle { font-size: 1.2em; color: #ccc; }
+        .content-block { background-color: rgba(255, 255, 255, 0.07); padding: 18px; border-radius: var(--border-radius); margin-bottom: 20px; text-align: right; border-left: 4px solid var(--accent-color); }
+        html[dir="ltr"] .content-block { border-left: none; border-right: 4px solid var(--accent-color); }
+        .content-block h4 i, .example-block h5 i { margin-left: 10px; }
+        .example-block { border: 1px solid rgba(253, 187, 45, 0.4); padding: 18px; border-radius: var(--border-radius); margin-bottom: 18px; background-color: rgba(0,0,0,0.15); }
+        .example-block p strong { color: #c5aef0; }
+        .example-block p { font-family: 'Courier New', Courier, monospace; background-color: rgba(0,0,0,0.25); padding: 10px; border-radius: 6px; direction: ltr; text-align: left; font-size: 0.95em; border-left: 3px solid var(--accent-color); white-space: pre-wrap; word-wrap: break-word; }
+        html[dir="ltr"] .example-block p { border-left: none; border-right: 3px solid var(--accent-color); }
+        .example-block p:lang(ar) { direction: rtl; text-align: right; font-family: var(--font-family-arabic); }
+        .toggle-explanation { background: linear-gradient(145deg, var(--accent-color), #e8a820); color: var(--primary-color); border: none; padding: 8px 15px; border-radius: var(--border-radius); cursor: pointer; font-family: var(--font-family-arabic); font-weight: bold; margin-top: 10px; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .toggle-explanation:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+        .toggle-explanation i { margin-right: 8px; transition: transform 0.3s ease-in-out; }
+        .toggle-explanation.open i { transform: rotate(180deg); }
+        .explanation { background-color: rgba(255, 255, 255, 0.04); padding: 12px; margin-top: 12px; border-radius: 6px; border-right: 4px solid var(--accent-color); transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, padding 0.5s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; padding-top: 0; padding-bottom: 0; }
+        html[dir="ltr"] .explanation { border-right: none; border-left: 4px solid var(--accent-color); }
+        .explanation.show { max-height: 1000px; opacity: 1; padding-top: 12px; padding-bottom: 12px; }
+        .explanation p { font-size: 0.92em; color: #ddd; }
+
+        .side-controls {
+            position: fixed; top: 50%; right: 10px; transform: translateY(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            width: var(--nav-width); z-index: 200;
+        }
+        html[dir="ltr"] .side-controls { right: auto; left: 10px; }
+
+        .navigation-buttons { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .navigation-buttons button {
+            background: linear-gradient(145deg, var(--accent-color), #e8a820); color: var(--primary-color);
+            border: none; padding: 10px 0; font-size: 0.9em; font-family: var(--font-family-arabic);
+            font-weight: bold; border-radius: calc(var(--border-radius) - 4px); cursor: pointer;
+            transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            width: 100%; display: flex; align-items: center; justify-content: center;
+        }
+        .navigation-buttons button i { font-size: 0.9em; margin: 0 5px; }
+        .navigation-buttons button:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+        .navigation-buttons button:disabled { background: #555; color: #999; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .progress-bar-container {
+            width: calc(100% - 20px); height: 8px; background-color: var(--card-bg-color);
+            border-radius: 4px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .progress-bar { height: 100%; width: 0; background: var(--accent-color); border-radius: 4px; transition: width 0.5s ease-in-out; }
+
+        .footer-credits { position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(15, 12, 41, 0.85); backdrop-filter: blur(5px); color: #aaa; text-align: center; padding: 8px 0; font-size: 0.85em; z-index: 100; border-top: 1px solid rgba(253, 187, 45, 0.2); }
+        .footer-credits p { margin: 1px 0; }
+        
+        /* --- Game Page Specific (from previous prompt's game.html) --- */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--card-bg-color); /* Match card background */
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            margin-bottom: 0; /* Remove margin if challenge-area is directly below */
+            border-bottom: 3px solid var(--accent-color);
+        }
+        .player-info span, .level-info h3 { margin: 0 15px; font-size: 1.1em; }
+        .player-info .value { color: var(--accent-color); font-weight: bold; }
+
+        .challenge-area { /* This will be card-style-content now */
+            text-align: right;
+            /* margin-top:0; Remove if game-header is directly above */
+            /* border-radius: 0 0 var(--border-radius) var(--border-radius); Remove if game-header isn't directly above */
+        }
+        .challenge-description {
+            background-color: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        textarea#promptInput {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #444;
+            background-color: #2a2a2a;
+            color: var(--text-color);
+            font-family: var(--font-family);
+            font-size: 1em;
+            margin-bottom: 15px;
+            resize: vertical;
+            min-height: 100px;
+        }
+        .prompt-input-area { margin-top: 20px; }
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: rgba(253,193,7, 0.1); /* var(--accent-color) with alpha */
+            border: 1px solid var(--accent-color);
+        }
+        .feedback.success { background-color: rgba(40,167,69,0.1); border-color: #28a745; color: #28a745; }
+        .feedback.error { background-color: rgba(220,53,69,0.1); border-color: #dc3545; color: #dc3545; }
+        .feedback.warning { background-color: rgba(255,193,7,0.15); border-color: var(--accent-color); color: var(--accent-color);}
+
+
+        .sidebar-game-info { /* New sidebar for game info */
+            position: fixed;
+            top: 10%;
+            left: 10px; /* For LTR, adjust for RTL */
+            width: 200px; /* Adjust as needed */
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        html[dir="rtl"] .sidebar-game-info {
+            left: auto;
+            right: 10px;
+        }
+
+        .sidebar-game-info h4 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--accent-color);
+            padding-bottom: 5px;
+        }
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .badge {
+            width: 45px; height: 45px;
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: help;
+        }
+        #techniquesList { list-style: none; padding: 0;}
+        #techniquesList li { 
+            font-size: 0.9em; 
+            margin-bottom: 5px; 
+            padding: 5px; 
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+        #techniquesList li.active-technique {
+            font-weight: bold;
+            color: var(--accent-color);
+            background-color: rgba(253, 187, 45, 0.2);
+        }
+
+
+        @media (max-width: 992px) { /* Adjust breakpoint for sidebar */
+            .sidebar-game-info {
+                display: none; /* Hide sidebar on smaller screens, or reposition */
+            }
+             body {
+                padding-right: var(--nav-width); 
+                padding-left: 10px; /* Adjust if nav is on other side */
+            }
+            html[dir="ltr"] body {
+                padding-left: var(--nav-width);
+                padding-right: 10px;
+            }
+             .presentation-container {
+                 width: calc(100% - var(--nav-width) - 20px);
+             }
+        }
+
+        @media (max-width: 768px) {
+            body { padding-right: 0; padding-left: 0; padding-bottom: 100px; }
+            .presentation-container { width: 95%; height: auto; min-height: 70vh; margin: 15px auto; }
+            .side-controls {
+                position: relative; top: auto; right: auto; left: auto; transform: none;
+                flex-direction: row; justify-content: center; width: 90%; margin: 20px auto 0; order: 2;
+            }
+            .navigation-buttons { flex-direction: row; width: auto; }
+            .navigation-buttons button { padding: 10px 15px; width: auto; }
+            .progress-bar-container { width: 60%; height: 10px; margin-top: 0; }
+            .footer-credits { font-size: 0.8em; padding: 8px 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page (index.html content - to be shown first) -->
+    <div id="loginPage" class="main-container landing-page card-style-content" style="max-width: 600px; margin-top: 5vh;">
+        <header>
+            <i class="fas fa-brain title-icon"></i>
+            <h1>لعبة سيد التلقين</h1>
+            <p class="subtitle">أتقن فن صياغة التلقينات التعليمية الفعالة!</p>
+        </header>
+        <section id="loginSection">
+            <h2><i class="fas fa-user-circle"></i> تسجيل الدخول / اسم اللاعب</h2>
+            <input type="text" id="username" placeholder="ادخل اسم المستخدم الخاص بك" aria-label="اسم المستخدم" style="width: 80%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #555; background: #333; color: #fff;">
+            <button id="startGameBtn" class="btn btn-primary"><i class="fas fa-play-circle"></i> ابدأ المغامرة!</button>
+        </section>
+        <nav class="main-nav" style="margin-top: 20px; display:flex; justify-content:center; gap:15px;">
+            <button id="howToPlayBtn" class="btn btn-secondary"><i class="fas fa-question-circle"></i> كيف ألعب؟</button>
+            <button id="leaderboardLinkBtn" class="btn btn-secondary"><i class="fas fa-trophy"></i> لوحة الصدارة</button>
+        </nav>
+    </div>
+
+    <!-- Game Page (game.html content - initially hidden) -->
+    <div id="gamePage" class="presentation-container" style="display: none;">
+        <div class="game-header">
+            <div class="player-info">
+                <span id="playerNameDisplay"><i class="fas fa-user"></i> اللاعب: <span class="value"></span></span>
+                <span id="playerScoreDisplay"><i class="fas fa-star"></i> النقاط: <span class="value">0</span></span>
+            </div>
+            <div class="level-info">
+                <h3><i class="fas fa-flag-checkered"></i> المستوى <span id="currentLevelDisplay">1</span>: <span id="levelNameDisplay">...</span></h3>
+            </div>
+            <button id="exitGameBtn" class="btn btn-danger btn-small" style="padding: 8px 12px; font-size: 0.9em;"><i class="fas fa-times-circle"></i> خروج</button>
+        </div>
+
+        <div class="game-content-area"> <!-- Renamed from .slide to .game-content-area -->
+            <div id="challengeDisplay" class="card-style-content"> <!-- This will hold the challenge -->
+                <div class="mentor-speech bubble hidden" style="background-color: rgba(var(--accent-color-rgb, 253, 187, 45), 0.2); padding: 10px; border-radius: 8px; margin-bottom:15px; border-left: 3px solid var(--accent-color);">
+                    <p id="mentorText" style="font-style: italic;"></p>
+                </div>
+                <h2 id="challengeTitle"><i class="fas fa-tasks"></i> ...</h2>
+                <p id="challengeDescription" class="challenge-description">...</p>
+                
+                <div class="prompt-input-area">
+                    <label for="promptInput" style="display:block; margin-bottom:8px; font-weight:bold;">اكتب تلقينك هنا:</label>
+                    <textarea id="promptInput" rows="7" placeholder="مثال: تصرف كمعلم علوم خبير في تبسيط المفاهيم..."></textarea>
+                    <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                        <button id="submitPromptBtn" class="btn btn-primary"><i class="fas fa-paper-plane"></i> إرسال التلقين</button>
+                        <button id="hintBtn" class="btn btn-warning btn-small" style="padding: 8px 12px; font-size: 0.9em;"><i class="fas fa-lightbulb"></i> تلميح (<span id="hintsRemaining">3</span>)</button>
+                    </div>
+                </div>
+                <div id="feedbackArea" class="feedback hidden">
+                    <h4><i class="fas fa-comment-alt"></i> تقييم التلقين:</h4>
+                    <p id="feedbackText"></p>
+                    <p id="pointsAwarded" style="font-weight:bold;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar for Badges and Techniques (initially hidden with gamePage) -->
+    <div id="gameSidebar" class="sidebar-game-info" style="display: none;">
+        <h4><i class="fas fa-medal"></i> شاراتك المكتسبة</h4>
+        <div id="badgesEarned" class="badges-grid"></div>
+        <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.1);">
+        <h4><i class="fas fa-book-open"></i> التقنية الحالية</h4>
+        <ul id="techniquesList">
+            <li id="currentTechniqueDisplay"></li>
+        </ul>
+    </div>
+
+
+    <!-- Leaderboard Page (leaderboard.html content - initially hidden) -->
+    <div id="leaderboardPage" class="main-container leaderboard-page card-style-content" style="display: none; max-width: 800px; margin-top: 5vh;">
+        <header style="margin-bottom: 20px;">
+            <h1><i class="fas fa-trophy"></i> لوحة الصدارة</h1>
+            <button id="backToMainFromLeaderboard" class="btn btn-secondary btn-small"><i class="fas fa-arrow-left"></i> العودة</button>
+        </header>
+        <table id="leaderboardTable">
+            <thead>
+                <tr>
+                    <th>الترتيب</th>
+                    <th><i class="fas fa-user"></i> اسم اللاعب</th>
+                    <th><i class="fas fa-star"></i> النقاط</th>
+                    <th><i class="fas fa-medal"></i> الشارات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populated by JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- How to Play Modal (initially hidden) -->
+    <div id="howToPlayModal" class="modal" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center;">
+        <div class="modal-content card-style-content" style="width: 80%; max-width: 600px; position: relative; animation: slideIn 0.5s ease-out;">
+            <span id="closeHowToPlayModal" class="close-btn" style="position: absolute; top: 10px; left: 15px; font-size: 2em; font-weight: bold; cursor: pointer; color: #aaa;">×</span>
+            <h2><i class="fas fa-info-circle"></i> طريقة اللعب</h2>
+            <p>في "سيد التلقين"، ستواجه تحديات لصياغة تلقينات تعليمية باستخدام تقنيات مختلفة. كلما كانت تلقيناتك أفضل، حصلت على نقاط أكثر وشارات مميزة. تعلم، تدرب، وتصدر لوحة الأبطال!</p>
+            <p>استخدم زر "تلميح" إذا واجهت صعوبة، وحاول تطبيق التقنية المطلوبة في كل تحدٍ.</p>
+        </div>
+    </div>
+
+
+    <div class="side-controls">
+        <div class="navigation-buttons">
+             <!-- أزرار التنقل بين التحديات (ليست بين الشرائح بعد الآن) -->
+            <button id="nextChallengeBtn" title="التحدي التالي"><i class="fas fa-forward"></i></button>
+            <button id="prevChallengeBtn" title="التحدي السابق"><i class="fas fa-backward"></i></button>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+
+    <div class="footer-credits">
+        <p>تصميم: إسلام محمد</p>
+        <p>eslam.mohamed@nagwa.com</p>
+    </div>
+
+    <script>
+    // game_data.js (محتوى التحديات)
+    const gameChallenges = [
+        // --- القسم الأول: تقنيات التلقين الأساسية وتحديد السياق ---
+        {
+            level: 1, levelName: "أساسيات السياق", id: "challenge_role_prompting_1", title: "خبير التاريخ",
+            description: "اطلب من النموذج أن يتصرف كـ'مؤرخ متخصص في تاريخ مصر القديمة وخبير في تبسيط المعلومات لطلاب المرحلة الإعدادية'، وأن يشرح نظام الحكم والإدارة في الدولة المصرية القديمة خلال عصر الدولة الوسطى.",
+            technique: "التلقين بالنماذج (Role Prompting)",
+            keywordsForEvaluation: ["تصرف كـ", "مؤرخ متخصص", "تاريخ مصر القديمة", "تبسيط المعلومات", "نظام الحكم والإدارة", "الدولة الوسطى"], points: 20,
+            hint: "حدد بوضوح دور الخبير والجمهور المستهدف والمهمة المطلوبة.",
+            badgeAwarded: { id: "roleExpertBadge", name: "خبير الأدوار", icon: "fas fa-user-tie" }
+        },
+        {
+            level: 1, levelName: "أساسيات السياق", id: "challenge_persona_prompting_1", title: "طالب حالم",
+            description: "اطلب من النموذج أن يتقمص شخصية 'طالب في الصف الثاني الإعدادي يشعر بالحنين إلى أيام الطفولة وبراءتها'، وأن يكتب فقرة يعبر فيها عن مشاعره تجاه هذه الفترة ويصف أهم ذكرياته.",
+            technique: "التلقين الافتراضي (Persona-based)",
+            keywordsForEvaluation: ["أنت طالب", "الصف الثاني الإعدادي", "حنين", "طفولة", "مشاعرك", "ذكريات"], points: 20,
+            hint: "صف الشخصية ومشاعرها والمطلوب منها بوضوح.",
+            badgeAwarded: { id: "personaCreatorBadge", name: "مبدع الشخصيات", icon: "fas fa-theater-masks" }
+        },
+        // --- القسم الثاني: تقنيات تعزيز الفهم والاستدلال العميق ---
+        {
+            level: 2, levelName: "تعميق الفهم", id: "challenge_rereading_1", title: "مصمم الأنشطة الدقيق",
+            description: "اطلب من النموذج تصميم نشاط تعليمي لطلاب الصف الخامس الابتدائي حول مفهوم 'المساحة والمحيط للمستطيل' يتضمن: تعريفًا مبسطًا، مثالاً محلولاً، تمرينين، ورسمًا توضيحيًا. ثم اطلب منه 'إعادة قراءة هذه المتطلبات' قبل تقديم تصميم النشاط.",
+            technique: "إعادة القراءة (RE2)",
+            keywordsForEvaluation: ["تصميم نشاط", "المساحة والمحيط", "تعريف مبسط", "مثال محلول", "تمرينين", "رسم توضيحي", "أعد قراءة"], points: 25,
+            hint: "اذكر جميع المتطلبات بوضوح ثم استخدم عبارة 'أعد قراءة هذه المتطلبات'.",
+            badgeAwarded: { id: "reReaderBadge", name: "القارئ المتمعن", icon: "fas fa-book-open-reader" }
+        },
+        {
+            level: 2, levelName: "تعميق الفهم", id: "challenge_rar_1", title: "الموضح الخبير",
+            description: "لديك طلب غامض: 'اكتب عن تأثير التغير المناخي على الزراعة في مصر لطلاب الإعدادي'. اطلب من النموذج أن 'يعيد صياغة ويوسع هذا الطلب'، موضحًا الجوانب التي يجب التركيز عليها ومستوى التفصيل المناسب لأعمارهم، ثم أن يكتب فقرتين بناءً على إعادة الصياغة.",
+            technique: "إعادة الصياغة والاستجابة (RaR)",
+            keywordsForEvaluation: ["أعد صياغة وتوسيع", "تأثير التغير المناخي", "الزراعة في مصر", "الجوانب التي يجب التركيز", "مستوى التفصيل"], points: 25,
+            hint: "اطلب من النموذج توضيح فهمه للمهمة قبل البدء في تنفيذها.",
+            badgeAwarded: { id: "rephraserBadge", name: "المعيد المتمكن", icon: "fas fa-retweet" }
+        },
+        {
+            level: 2, levelName: "تعميق الفهم", id: "challenge_s2a_1", title: "الملخص المركز",
+            description: "قدم للنموذج النص التالي (مع معلومات مشتتة): 'لخص النقاش التالي الذي دار بين الطلاب حول أسباب ثورة 1919 في مصر. بدأ النقاش بتعليق من أحمد حول دور سعد زغلول، ثم تحدثت سارة عن الأوضاع الاقتصادية، لكن قاطعها كريم ليتحدث عن فيلم وثائقي شاهده مؤخرًا عن تلك الفترة وكيف كان التصوير رائعًا.' ثم اطلب منه 'استخراج فقط الأجزاء التي تناقش الأسباب المباشرة لثورة 1919 وتجاهل التعليقات الجانبية، ثم تلخيص هذه الأجزاء'.",
+            technique: "انتباه النظام 2 (S2A)",
+            keywordsForEvaluation: ["استخرج فقط الأجزاء", "الأسباب المباشرة", "ثورة 1919", "تجاهل التعليقات الجانبية", "تلخيص"], points: 25,
+            hint: "اطلب من النموذج تنقيح المدخلات والتركيز على المعلومات الجوهرية.",
+            badgeAwarded: { id: "s2aFilterBadge", name: "مرشح S2A", icon: "fas fa-filter-circle-dollar" }
+        },
+        {
+            level: 3, levelName: "الاستدلال المتقدم", id: "challenge_simtom_1", title: "محلل الشخصيات",
+            description: "قدم السياق التالي: 'كان الأرنب السريع يسخر دائمًا من السلحفاة البطيئة. نام الأرنب في منتصف الطريق ظنًا منه أن السلحفاة لن تسبقه.' اطلب من النموذج: 'أنت الأرنب في القصة. ما هي أفكارك ومعتقداتك في هذه اللحظة؟' ثم اطلب منه: 'بناءً على ما تعرفه وتعتقده (كأرنب)، هل تتوقع أن تفوز السلحفاة بالسباق؟ ولماذا؟'",
+            technique: "محاكاة نظرية العقل (SimToM)",
+            keywordsForEvaluation: ["أنت الأرنب", "أفكارك ومعتقداتك", "بناءً على ما تعرفه وتعتقده", "هل تتوقع"], points: 30,
+            hint: "اجعل النموذج يفكر من منظور شخصية أخرى بمعرفتها المحدودة.",
+            badgeAwarded: { id: "simTomBadge", name: "محاكي العقول", icon: "fas fa-users-viewfinder" }
+        },
+        {
+            level: 3, levelName: "الاستدلال المتقدم", id: "challenge_reflection_1", title: "الناقد البناء",
+            description: "اطلب من النموذج أولاً 'شرح مفهوم الجاذبية الأرضية لطلاب الصف السادس'. بعد أن يقدم إجابته (افترض أنه قدمها)، اطلب منه: 'راجع الشرح الذي قدمته. هل استخدمت أمثلة كافية؟ هل اللغة بسيطة؟ هل هناك مصطلحات تحتاج تبسيط؟ قدم نسخة منقحة'.",
+            technique: "التلقين الانعكاسي",
+            keywordsForEvaluation: ["راجع الشرح", "أمثلة كافية", "لغة بسيطة", "تبسيط المصطلحات", "نسخة منقحة"], points: 30,
+            hint: "اطلب من النموذج تقييم وتحسين مخرجاته الأولية بناءً على معايير.",
+            badgeAwarded: { id: "reflectionPro", name: "المراجع الخبير", icon: "fas fa-rotate-left" }
+        },
+        {
+            level: 3, levelName: "الاستدلال المتقدم", id: "challenge_maieutic_1", title: "المحاور السقراطي",
+            description: "اطلب من النموذج شرح ظاهرة 'قوس قزح' لطلاب المرحلة الابتدائية، وذلك من خلال الإجابة على سلسلة من الأسئلة التوجيهية التي تقدمها له خطوة بخطوة، مثل: 1. متى نرى قوس قزح؟ 2. ما مصدر الضوء؟ 3. مم يتكون ضوء الشمس؟ ...إلخ، حتى يصل إلى شرح كامل.",
+            technique: "التلقين المايوتيكي",
+            keywordsForEvaluation: ["سلسلة من الأسئلة", "خطوة بخطوة", "فرضية:", "تفسير:", "بناءً على هذه الخطوات"], points: 30,
+            hint: "قدّم أسئلة متسلسلة تبني الفهم تدريجيًا.",
+            badgeAwarded: { id: "maieuticMaster", name: "المحاور السقراطي", icon: "fas fa-sitemap" }
+        },
+        // --- القسم الثالث: تقنيات التلقين التفاعلية والتكيفية ---
+        {
+            level: 4, levelName: "التفاعل والتكيف", id: "challenge_active_prompting_1", title: "مكتشف الصعوبات",
+            description: "تخيل أنك تريد تحديد المفاهيم الصعبة في وحدة 'الكسور' لطلاب الصف الرابع. صغ تلقينًا يطلب من النموذج (افتراضيًا) تحليل مجموعة من إجاباته السابقة على أسئلة الكسور، وتحديد الأسئلة الثلاثة التي أظهر فيها أكبر قدر من 'عدم اليقين' أو التناقض، ثم يقترح كيف يمكن للمطور شرح هذه المفاهيم الصعبة.",
+            technique: "التلقين النشط",
+            keywordsForEvaluation: ["تحليل إجابات سابقة", "عدم اليقين", "تناقض", "المفاهيم الصعبة", "شرح هذه المفاهيم"], points: 35,
+            hint: "ركز على فكرة استخدام 'عدم يقين' النموذج لتوجيه جهود التحسين.",
+            badgeAwarded: { id: "activeLearnerBadge", name: "المتعلم النشط", icon: "fas fa-bolt" }
+        },
+        {
+            level: 4, levelName: "التفاعل والتكيف", id: "challenge_clarification_prompting_1", title: "طالب التوضيح",
+            description: "لديك طلب عام للنموذج: 'أريد أفكارًا لمشاريع بحثية عن البيئة لطلاب الإعدادي'. صغ تلقينًا يوجه النموذج (إذا كان مدربًا على ذلك) ليطرح أسئلة توضيحية قبل تقديم الأفكار، مثل سؤاله عن الموضوعات البيئية المحددة، نوع المشاريع المفضلة، أو المدة الزمنية.",
+            technique: "التلقين بالتوضيح",
+            keywordsForEvaluation: ["هل يمكنك توضيح:", "موضوعات بيئية محددة", "نوع المشاريع", "مدة زمنية"], points: 25,
+            hint: "صغ طلبًا أوليًا غامضًا، ثم اطلب من النموذج أن يستوضح قبل الإجابة.",
+            badgeAwarded: { id: "clarifierBadge", name: "المستوضح البارع", icon: "fas fa-question" }
+        },
+        // --- القسم الرابع: تقنيات التلقين المتقدمة والمنهجية ---
+        {
+            level: 5, levelName: "المنهجيات المتقدمة", id: "challenge_progressive_prompting_1", title: "البناء التدريجي",
+            description: "اطلب من النموذج إنشاء شرح مبسط لـ 'الجهاز الهضمي' للصف الخامس. ابدأ بتلقين يطلب المقدمة والأعضاء الرئيسية. ثم، في تلقين ثانٍ (افتراضي)، اطلب منه التركيز على وظيفة الفم والمريء بناءً على الشرح السابق.",
+            technique: "التلقين التدريجي",
+            keywordsForEvaluation: ["اشرح بأسلوب مبسط", "الأعضاء الرئيسية", "بناءً على الشرح السابق", "ركز الآن على"], points: 30,
+            hint: "قسم المهمة إلى خطوات، واجعل كل خطوة لاحقة تبني على سابقتها.",
+            badgeAwarded: { id: "progressiveBuilder", name: "البنّاء التدريجي", icon: "fas fa-stairs" }
+        },
+        {
+            level: 5, levelName: "المنهجيات المتقدمة", id: "challenge_contrastive_prompting_1", title: "المقارن الخبير",
+            description: "اطلب من النموذج شرح الفرق بين 'التاء المربوطة والتاء المفتوحة'. اطلب منه تقديم مثال صحيح لكل منهما، ثم مثال خاطئ شائع قد يقع فيه الطلاب، مع توضيح سبب صحة الصحيح وخطأ الخاطئ.",
+            technique: "التلقين التبايني",
+            keywordsForEvaluation: ["اشرح الفرق", "مثالاً صحيحًا", "مثالاً خاطئًا شائعًا", "وضح لماذا", "التمييز بينهما"], points: 30,
+            hint: "اطلب أمثلة إيجابية وسلبية مع شرح التباين بينها.",
+            badgeAwarded: { id: "contrastiveThinker", name: "المفكر التبايني", icon: "fas fa-code-compare" }
+        },
+        {
+            level: 5, levelName: "المنهجيات المتقدمة", id: "challenge_emotion_prompting_1", title: "الكاتب الملهم",
+            description: "اطلب من النموذج كتابة مقدمة لوحدة تعليمية عن 'وطننا الغالي مصر' لطلاب المرحلة الإعدادية. استخدم عبارات مثل 'يا مبدع الكلمات'، 'يجب أن تشعل في قلوبهم نيران الانتماء'، 'أظهر لنا براعتك' لتحفيزه عاطفياً.",
+            technique: "التلقين العاطفي",
+            keywordsForEvaluation: ["يا مبدع الكلمات", "تفيض حباً وشوقاً", "تشعل في قلوبهم", "براعتك", "أسر القلوب"], points: 25,
+            hint: "استخدم لغة مشحونة بالعاطفة لتحفيز النموذج.",
+            badgeAwarded: { id: "emotionEvoker", name: "مثير المشاعر", icon: "fas fa-face-grin-hearts" }
+        },
+        // --- القسم الخامس: تقنيات التلقين المعتمدة على البيانات والأدوات ---
+        {
+            level: 6, levelName: "أدوات وبيانات", id: "challenge_rag_1", title: "الباحث المطلع",
+            description: "اطلب من النموذج إعداد موجز لطلاب الثانوية العامة حول 'أهم ثلاثة مشروعات قومية جديدة في مصر تم إطلاقها خلال الـ 12 شهرًا الماضية'. اذكر في تلقينك أنه يجب عليه (افتراضيًا) 'استخدام قاعدة البيانات المتاحة التي تحتوي على أحدث البيانات الصحفية والتقارير الحكومية'.",
+            technique: "التوليد المعزز بالاسترجاع (RAG)",
+            keywordsForEvaluation: ["أحدث المشروعات", "خلال الـ 12 شهرًا الماضية", "استخدم قاعدة البيانات المتاحة", "بيانات صحفية", "تقارير حكومية"], points: 35,
+            hint: "اطلب معلومات حديثة جدًا واذكر (افتراضيًا) ضرورة استخدام مصدر بيانات خارجي.",
+            badgeAwarded: { id: "ragResearcher", name: "باحث RAG", icon: "fas fa-cloud-download-alt" }
+        },
+        {
+            level: 6, levelName: "أدوات وبيانات", id: "challenge_art_ape_1", title: "مهندس التلقين الآلي",
+            description: "اطلب من نموذج (لنفترض أنه APE) أن 'يولد 4 تلقينات مختلفة يمكن تقديمها لنموذج لغوي آخر بهدف إنشاء أسئلة مناقشة عميقة ومبتكرة حول الجوانب الإيجابية والسلبية لسياسات محمد علي باشا'.",
+            technique: "التلقين التلقائي باستخدام الأدوات (APE)", // التركيز على APE هنا
+            keywordsForEvaluation: ["قم بتوليد 4 تلقينات مختلفة", "نموذج لغوي آخر", "أسئلة مناقشة عميقة", "تحليل نقدي"], points: 30,
+            hint: "اطلب من النموذج إنشاء تلقينات بدلاً من إنشاء المحتوى مباشرة.",
+            badgeAwarded: { id: "autoPrompter", name: "مهندس التلقين الآلي", icon: "fas fa-tools" }
+        },
+        {
+            level: 6, levelName: "أدوات وبيانات", id: "challenge_soft_prompting_1", title: "المخصص الدقيق",
+            description: "تخيل أن لديك 'تلقين ناعم' تم تدريبه مسبقًا اسمه 'تلقين_شرح_رياض_أطفال'. صغ تلقينًا (للنظام/المطور) يطلب من النموذج 'باستخدام تلقين_شرح_رياض_أطفال، اشرح مفهوم دورة الماء في الطبيعة' بأسلوب قصصي ومبسط جدًا يناسب أطفال مرحلة رياض الأطفال.",
+            technique: "التلقين الناعم (Soft Prompting)",
+            keywordsForEvaluation: ["باستخدام 'تلقين_شرح_رياض_أطفال'", "اشرح مفهوم", "دورة الماء في الطبيعة", "أسلوب قصصي ومبسط"], points: 25,
+            hint: "صغ الطلب كما لو كنت تستدعي تخصصًا دقيقًا للنموذج عبر تلقين ناعم محدد مسبقًا.",
+            badgeAwarded: { id: "softTuner", name: "موالف التلقين الناعم", icon: "fas fa-wave-square" }
+        }
+    ];
+    
+    // ... (باقي كود script.js كما هو في الرد السابق) ...
+    // ... مع التأكد من أن `gameChallenges` هي المستخدمة بدلاً من `challenges` إذا تم تغيير الاسم
+    </script>
+</body>
+</html>
